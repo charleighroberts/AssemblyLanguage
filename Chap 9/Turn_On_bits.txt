@@ -1,0 +1,28 @@
+%include "/usr/local/share/csc314/asm_io.inc"
+
+segment .data
+
+segment .bss
+
+segment .text
+        global  asm_main
+
+asm_main:
+        push    ebp
+        mov             ebp, esp
+        ; ********** CODE STARTS HERE **********
+        call read_int   ; read the value of the index of the bit to turn off
+        mov bl, al      ; the value of the index is stored in bl
+        mov cl, bl      ; must have the bit index in cl
+        mov ebx, 1      ; create a number 0...01
+        shl ebx, cl     ; shift it left cl times
+        call read_int   ; read the value of eax
+        or eax, ebx     ; turn on the desired bit using ebx as a mask
+        dump_regs 1
+        call print_nl
+
+        ; *********** CODE ENDS HERE ***********
+        mov             eax, 0
+        mov             esp, ebp
+        pop             ebp
+        ret

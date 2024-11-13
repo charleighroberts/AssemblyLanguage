@@ -1,0 +1,64 @@
+%include "/usr/local/share/csc314/asm_io.inc"
+
+
+segment .data
+prompt1 db "Enter a value for val1: ",0
+prompt2 db "Enter a value for val2: ",0
+prompt3 db "Enter a value for val3: ",0
+outmesg db "The value of X is: ",0
+
+segment .bss
+X resd 1
+val1 resd 1
+val2 resd 1
+val3 resd 1
+
+segment .text
+        global  asm_main
+
+asm_main:
+        push    ebp
+        mov             ebp, esp
+        ; ********** CODE STARTS HERE **********
+        mov eax, prompt1
+        call print_string
+        call read_int
+        mov [val1], eax
+
+        mov eax, prompt2
+        call print_string
+        call read_int
+        mov [val2], eax
+
+        mov eax, prompt3
+        call print_string
+        call read_int
+        mov [val3], eax
+
+        mov ebx, [val1]
+        cmp ebx, [val2]
+        jle else_block
+
+        mov ebx, [val2]
+        cmp ebx, [val3]
+        jle else_block
+        mov ebx, [val2]
+        mov [X], ebx
+        jmp end
+
+else_block:
+mov ebx, [val3]
+mov [X], ebx
+jmp end
+
+end:
+mov eax, outmesg
+call print_string
+mov eax, [X]
+call print_int
+call print_nl
+        ; *********** CODE ENDS HERE ***********
+        mov             eax, 0
+        mov             esp, ebp
+        pop             ebp
+        ret

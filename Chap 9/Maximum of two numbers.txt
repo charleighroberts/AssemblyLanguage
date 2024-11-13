@@ -1,0 +1,48 @@
+%include "/usr/local/share/csc314/asm_io.inc"
+
+segment .data
+prompt1  db "Enter the first number: ",0
+prompt2  db "Enter the second number: ",0
+outmesg1 db "The maximum is:",0
+
+segment .bss
+num resd 1
+segment .text
+        global  asm_main
+
+asm_main:
+        push    ebp
+        mov             ebp, esp
+        ; ********** CODE STARTS HERE **********
+        mov eax, prompt1
+        call print_string
+        call read_int
+        mov [num], eax      ; the first number is in num
+
+        mov eax, prompt2
+        call print_string
+        call read_int       ; the second number is in eax
+
+        xor ebx, ebx        ; ebx = 0
+        cmp eax, [num]      ; compare eax and [num]
+        setg bl             ; bl = 1 if eax > [num], 0 otherwise
+        neg ebx             ; take one’s complement + 1
+        mov ecx, ebx
+   	and ecx, eax        ; ecx = eax AND ebx
+        not ebx
+        and ebx, [num]      ; ebx = [num] AND NOT(ebx)
+        or ecx, ebx         ; ecx = (eax AND ebx) ) OR ([num] AND NOT(ebx))
+
+        mov eax, outmesg1
+        call print_string
+        mov eax, ecx
+        call print_int
+        call print_nl
+
+
+        ; *********** CODE ENDS HERE ***********
+        mov             eax, 0
+        mov             esp, ebp
+        pop             ebp
+        ret
+

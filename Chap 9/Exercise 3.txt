@@ -1,0 +1,59 @@
+%include "/usr/local/share/csc314/asm_io.inc"
+
+
+segment .data
+prompt1 db "Enter two short numbers: ",0
+outmesg db "The result of the multiplication is: ",0
+
+segment .bss
+num1 resb 1
+num2 resb 1
+segment .text
+        global  asm_main
+
+asm_main:
+        push    ebp
+        mov             ebp, esp
+        ; ********** CODE STARTS HERE **********
+        mov eax, prompt1
+        call print_string
+        call read_int           ; read the multiplicand
+        mov [num1], eax         ; store the multiplicand in num1
+        call read_int           ; read th multiplier
+        mov [num2], eax         ; store the multiplier in num2
+        mov ax, 0               ; result:=0
+        mov cl, 7               ; cl is the loop counter (i = 7)
+        mov dl, [num2]
+
+loop_start:
+    cmp cl, 0
+    jl loop_end
+    rol dl, 1                   ; test bits of num2 from left
+    jnc skip1                   ; if 0 (i.e CF =0), do nothing
+
+    mov bl, [num1]
+    movzx bx, bl
+    shl bx, cl                  ; num1*2^i
+
+    add ax, bx                  ; result:= result + num1*2^i
+    dec cl
+    jmp loop_start
+
+skip1:
+dec cl
+jmp loop_start
+
+loop_end:
+mov dx, ax
+mov eax, outmesg
+call print_string
+movzx edx, dx
+mov eax, edx
+call print_int
+call print_nl
+
+        ; *********** CODE ENDS HERE ***********
+        mov             eax, 0
+        mov             esp, ebp
+        pop             ebp
+        ret

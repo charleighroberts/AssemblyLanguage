@@ -1,0 +1,59 @@
+%include "/usr/local/share/csc314/asm_io.inc"
+
+segment .data
+prompt1 db "Enter a number: ",0
+prompt2 db "Enter another number: ",0
+outmesg1 db "You entered ",0
+outmesg2 db " and ",0
+outmesg3 db ", the sum of these is ",0
+
+segment .bss
+input1 resd 1
+input2 resd 1
+
+segment .text
+        global  asm_main
+
+asm_main:
+    enter 0,0
+    pusha
+        ; ********** CODE STARTS HERE **********
+    call print_nl
+    mov eax, prompt1            ; print out prompt1
+    call print_string
+    mov ebx, input1             ; store address of input1 into ebx
+    call get_int
+
+    mov eax, prompt2            ; print out prompt2
+    call print_string
+    mov ebx, input2             ; store address of input2 into ebx
+    call get_int
+
+    mov eax, [input1]           ; eax = dword at input1
+    add eax, [input2]           ; eax += dword at input2
+    mov ebx, eax                ; ebx = eax
+
+    mov eax, outmesg1
+    call print_string           ; print out first message
+    mov eax, [input1]
+    call print_int              ; print out input1
+    mov eax, outmesg2
+    call print_string           ; print out second message
+    mov eax, [input2]
+    call print_int              ; print out input2
+
+    mov eax, outmesg3
+    call print_string           ; print out first message
+    mov eax, ebx
+    call print_int              ; print out sum (ebx)
+    call print_nl
+
+        ; *********** CODE ENDS HERE ***********
+    popa
+    mov eax, 0
+    leave
+    ret
+get_int:
+    call read_int
+    mov [ebx], eax              ; store input into memory
+    ret                         ; jump back to caller
