@@ -1,4 +1,5 @@
-%include "/usr/local/share/csc314/asm_io.inc"
+%include "asm_io.inc"
+
 
 segment .data
 prompt  db "Please input a set of non-zero integers.",10
@@ -10,7 +11,7 @@ segment .bss
 sum resd 1
 
 segment .text
-        global  asm_main
+	global  asm_main
 
 asm_main:
         push ebp

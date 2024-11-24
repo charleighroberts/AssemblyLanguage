@@ -1,4 +1,4 @@
-%include "/usr/local/share/csc314/asm_io.inc"
+%include "asm_io.inc"
 
 segment .data
 msg1  db "enter N: ",0

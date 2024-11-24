@@ -9,3 +9,4 @@ game: game.asm
 	nasm -f elf game.asm
 	# gcc -no-pie -g -m32 -o game game.o /usr/local/share/csc314/driver.c /usr/local/share/csc314/asm_io.o
 	gcc -no-pie -g -m32 -o game game.o /mnt/c/Users/granite/Documents/AssemblyLanguage/FinalProject/game/driver.c /mnt/c/Users/granite/Documents/AssemblyLanguage/FinalProject/game/asm_io.o
+	
