@@ -202,6 +202,8 @@ init_board:
 	call	fopen
 	add		esp, 8
 	mov		DWORD [ebp - 4], eax
+		
+	
 
 	; read the file data into the global buffer
 	; line-by-line so we can ignore the newline characters
